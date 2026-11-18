@@ -47,7 +47,7 @@ const menu = Array.from(document.querySelectorAll("#grid-produk .kartu")).map((k
   nama: kartu.dataset.nama,
   kategori: kartu.dataset.kategori,
   harga: Number(kartu.dataset.harga),
-  deskripsi: kartu.dataset.deskripsi,
+  deskripsi: kartu.dataset.deskripsi.replace(/\s+/g, " ").trim(),
   gambar: $("img.foto", kartu).getAttribute("src"),
   habis: /menunggu pasokan/i.test(kartu.dataset.deskripsi),
   el: kartu,
@@ -241,7 +241,7 @@ function saringKatalog() {
   menu.forEach((m) => {
     const cocokKategori = kategori === "semua" || m.kategori === kategori;
     const cocokKata =
-      !kata || (m.nama + " " + m.kategori + " " + m.deskripsi).toLowerCase().includes(kata);
+      !kata || (m.nama + " " + m.kategori).toLowerCase().includes(kata);
     m.el.hidden = !(cocokKategori && cocokKata);
   });
 }
@@ -289,9 +289,9 @@ function tampilkanDetail(id) {
   const foto = $("#detail-gambar");
   foto.src = m.gambar;
   foto.alt = m.nama;
-  $("#detail-nama").textContent = m.nama;
-  $("detail-gambar").Object = m.gambar;
-  $("#detail-deskripsi").textContent = m.deskripsi;
+  // Judul detail menampilkan deskripsi menu (nama menu ada di baris "Item" pada kasir)
+  $("#detail-nama").textContent = m.deskripsi;
+  $("#detail-deskripsi").hidden = true;
   $("#kasir-nama").textContent = m.nama;
   $("#kasir-harga").textContent = rupiah(m.harga) + " / porsi";
   $("#isian-jumlah").disabled = m.habis;
